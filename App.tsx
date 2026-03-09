@@ -266,19 +266,21 @@ const App: React.FC = () => {
   // --- Handlers ---
 
   const handleCitationClick = (filename: string, page: number, text: string) => {
-    // Fuzzy Search File
-    const normalizedTarget = filename.toLowerCase().replace(/[^a-z0-9]/g, '');
-    const foundFile = state.files.find(f => 
-      f.name.toLowerCase().replace(/[^a-z0-9]/g, '').includes(normalizedTarget) ||
-      normalizedTarget.includes(f.name.toLowerCase().replace(/[^a-z0-9]/g, ''))
-    );
+    // Mencari file dengan membandingkan karakter alfanumerik saja
+    const foundFile = state.files.find(f => {
+      const cleanAiName = filename.toLowerCase().replace(/[^a-z0-9]/g, '');
+      const cleanRealName = f.name.toLowerCase().replace(/[^a-z0-9]/g, '');
+      return cleanRealName.includes(cleanAiName) || cleanAiName.includes(cleanRealName);
+    });
 
-    if (foundFile) {
-      setActiveFileId(foundFile.id);
+    const targetFile = foundFile || state.files[0];
+
+    if (targetFile) {
+      setActiveFileId(targetFile.id);
       setActivePage(page);
       setActiveHighlight(text);
     } else {
-      alert(`File "${filename}" tidak ditemukan dalam sesi ini.`);
+      alert(`Waduh, aku bingung cari filenya. Coba pastikan file yang kamu maksud sudah di-upload.`);
     }
   };
 
