@@ -266,23 +266,27 @@ const App: React.FC = () => {
   // --- Handlers ---
 
   const handleCitationClick = (filename: string, page: number, text: string) => {
-    // Mencari file dengan membandingkan karakter alfanumerik saja
-    const foundFile = state.files.find(f => {
-      const cleanAiName = filename.toLowerCase().replace(/[^a-z0-9]/g, '');
-      const cleanRealName = f.name.toLowerCase().replace(/[^a-z0-9]/g, '');
-      return cleanRealName.includes(cleanAiName) || cleanAiName.includes(cleanRealName);
-    });
+  // 1. Bersihkan nama dari AI
+  const cleanAiName = filename.toLowerCase().replace(/[^a-z0-9]/g, '');
 
-    const targetFile = foundFile || state.files[0];
+  // 2. Cari file yang paling mirip
+  let foundFile = state.files.find(f => {
+    const cleanRealName = f.name.toLowerCase().replace(/[^a-z0-9]/g, '');
+    return cleanRealName.includes(cleanAiName) || cleanAiName.includes(cleanRealName);
+  });
 
-    if (targetFile) {
-      setActiveFileId(targetFile.id);
-      setActivePage(page);
-      setActiveHighlight(text);
-    } else {
-      alert(`Waduh, aku bingung cari filenya. Coba pastikan file yang kamu maksud sudah di-upload.`);
-    }
-  };
+  // 3. JIKA MASIH GAK KETEMU: Pakai file yang saat ini sedang dibuka user (Active File)
+  // Ini trik paling ampuh kalau cuma ada 1-2 file
+  const targetFile = foundFile || state.files.find(f => f.id === activeFileId) || state.files[0];
+
+  if (targetFile) {
+    setActiveFileId(targetFile.id);
+    setActivePage(page);
+    // Kita tambahkan sedikit delay atau paksa update highlight
+    setActiveHighlight(""); 
+    setTimeout(() => setActiveHighlight(text), 10);
+  }
+};
 
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const newFilesList = event.target.files;
@@ -456,11 +460,12 @@ const App: React.FC = () => {
         {/* RIGHT: PDF Evidence Viewer (60% width on Desktop) */}
         <div className="hidden md:flex md:flex-[0.6] bg-slate-100 p-4 flex-col">
            {activeFile ? (
-             <PdfViewer 
-               file={activeFile} 
-               pageNumber={activePage} 
-               highlightText={activeHighlight} 
-             />
+             <PdfViewer
+               key={`${activeFile.id}-${activePage}-${activeHighlight}`}
+               file={activeFile}
+              pageNumber={activePage}
+              highlightText={activeHighlight}
+              />
            ) : (
              <ViewerPlaceholder />
            )}
