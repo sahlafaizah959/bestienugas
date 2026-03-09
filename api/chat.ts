@@ -1,7 +1,7 @@
 import { GoogleGenAI, GenerateContentResponse, Content } from '@google/genai';
 import { VercelRequest, VercelResponse } from '@vercel/node';
-import { MODEL_NAME, SYSTEM_INSTRUCTION } from '../constants';
-import { Message, UploadedFile } from '../types';
+import { MODEL_NAME, SYSTEM_INSTRUCTION } from './constants';
+import { Message, UploadedFile } from './types';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {
@@ -40,8 +40,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     });
 
     const resultStream = await chat.sendMessageStream({
-      message: { role: 'user', parts: contentParts }
-    });
+  message: contentParts
+});
 
     // Stream ke Res
     for await (const chunk of resultStream) {
