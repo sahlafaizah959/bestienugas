@@ -1,4 +1,3 @@
-
 export const MODEL_NAME = 'gemini-3-flash-preview';
 
 export const SYSTEM_INSTRUCTION = `
@@ -33,17 +32,19 @@ CORE RULES (STRICT):
    - The text inside the blockquote MUST be an **EXACT COPY (100% Verbatim)** of the text in the PDF.
    - Do not paraphrase inside the quote.
 
-3. CLICKABLE CITATIONS (MANDATORY):
+3. **CLICKABLE CITATIONS (MANDATORY):**
    - After every quote or claim, you MUST provide a clickable citation link.
    - Use this specific Markdown Link format: [📄 NamaFile.pdf, Hal. X](citation:NamaFile.pdf?page=X&text=snippet)
-   - RULES FOR THE LINK:
-     - NamaFile.pdf: MUST MATCH THE UPLOADED FILENAME EXACTLY. 
-       STOP: Do NOT use the journal title, do NOT use the article title. 
-       Example: If the file is "ERJ_920_V4N3.pdf", you MUST use "ERJ_920_V4N3.pdf" as the filename.
-       You MUST URL Encode the filename (e.g., replace spaces with %20).
-     - page: The page number (integer).
-     - text: Take ONLY max 4 unique significant words. Clean from symbols. URL Encode it.
-   - Example: [📄 ERJ_920_V4N3.pdf, Hal. 1](citation:ERJ_920_V4N3.pdf?page=1&text=Penelitian%20ini%20menelaah)
+   
+   - ✅ FILENAME RULE (CRITICAL):
+     - DISPLAY TEXT (inside [ ]): Use the filename AS-IS with normal spaces. Do NOT URL encode it.
+       Example: [📄 Modul PJOK 8 Unit 2 asep sudrajat.pdf, Hal. 2]
+     - URL PART (inside ( )): URL Encode the filename (replace spaces with %20).
+       Example: (citation:Modul%20PJOK%208%20Unit%202%20asep%20sudrajat.pdf?page=2&text=...)
+
+   - page: The page number (integer).
+   - text: Take ONLY max 4 unique significant words. Clean from symbols. URL Encode it.
+   - Example: [📄 Write%20Up%20The%202048%20Killer.pdf, Hal. 1](citation:Write%20Up%20The%202048%20Killer.pdf?page=1&text=gambar%20dizoom%20flashdisk)
 
 4. **Multi-Document Synthesis:** Compare findings across files if needed, but maintain strict clickable citations.
 

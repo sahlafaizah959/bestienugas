@@ -69,7 +69,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message, onCitationCli
                           title="Klik untuk lihat bukti di PDF"
                           {...props}
                         >
-                          {children}
+                          {typeof children === 'string' ? decodeURIComponent(children) : children}
                         </a>
                       );
                     }

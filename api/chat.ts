@@ -1,7 +1,6 @@
-import { GoogleGenAI, GenerateContentResponse, Content } from '@google/genai';
+import { GoogleGenAI, Content } from '@google/genai';
 import { VercelRequest, VercelResponse } from '@vercel/node';
 import { MODEL_NAME, SYSTEM_INSTRUCTION } from '../constants.js';
-import { Message, UploadedFile } from '../types.js';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {
@@ -11,22 +10,33 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     const { history, currentPrompt, files } = req.body;
 
-    // Validasi API Key
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
       return res.status(500).json({ error: 'API_KEY tidak dikonfigurasi' });
     }
 
     const ai = new GoogleGenAI({ apiKey });
-    
+
     // Logic Mapping History
     const formattedHistory: Content[] = history.map((msg: any) => ({
       role: msg.sender === 'user' ? 'user' : 'model',
       parts: [{ text: msg.text }]
     }));
 
-    // Logic File & Chat
+    // ✅ FIX: Inject real filenames so AI never guesses
+    const fileContextPreamble = files.length > 0
+      ? `[MANDATORY FILE CONTEXT — FOR CITATIONS]\n` +
+        `The following files have been uploaded. You MUST use these EXACT filenames in all citation links.\n` +
+        `Do NOT rename, guess, or derive filenames from document content.\n\n` +
+        files.map((file: any, i: number) =>
+          `File ${i + 1}: "${file.name}" (MIME: ${file.mimeType})`
+        ).join('\n') +
+        `\n[END OF FILE CONTEXT]\n\n`
+      : '';
+
     const contentParts = [
+      // ✅ Preamble injected FIRST before PDF data
+      ...(fileContextPreamble ? [{ text: fileContextPreamble }] : []),
       ...files.map((file: any) => ({
         inlineData: { mimeType: file.mimeType, data: file.data }
       })),
@@ -40,8 +50,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     });
 
     const resultStream = await chat.sendMessageStream({
-  message: contentParts
-});
+      message: contentParts
+    });
 
     // Stream ke Res
     for await (const chunk of resultStream) {
@@ -49,6 +59,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         res.write(chunk.text);
       }
     }
+
     res.end();
 
   } catch (error: any) {
