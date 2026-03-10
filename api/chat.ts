@@ -10,9 +10,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     const { history, currentPrompt, files } = req.body;
 
-    const apiKey = process.env.GEMINI_API_KEY;
+    // Support both API_KEY and GEMINI_API_KEY env var names
+    const apiKey = process.env.API_KEY || process.env.GEMINI_API_KEY;
     if (!apiKey) {
-      return res.status(500).json({ error: 'API_KEY tidak dikonfigurasi' });
+      return res.status(500).json({ error: 'API_KEY tidak dikonfigurasi di Vercel Environment Variables' });
     }
 
     const ai = new GoogleGenAI({ apiKey });
@@ -43,15 +44,42 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       { text: currentPrompt }
     ];
 
-    const chat = ai.chats.create({
-      model: MODEL_NAME,
-      history: formattedHistory,
-      config: { systemInstruction: SYSTEM_INSTRUCTION, temperature: 0.3 }
-    });
+    // ✅ FIX: Set streaming headers BEFORE writing any data
+    res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+    res.setHeader('Transfer-Encoding', 'chunked');
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.status(200);
 
-    const resultStream = await chat.sendMessageStream({
-      message: contentParts
-    });
+    // Retry logic with fallback model
+    let attempt = 0;
+    const maxAttempts = 2;
+    let resultStream: any = null;
+    let currentModel = MODEL_NAME;
+
+    while (attempt < maxAttempts) {
+      try {
+        const chat = ai.chats.create({
+          model: currentModel,
+          history: formattedHistory,
+          config: { systemInstruction: SYSTEM_INSTRUCTION, temperature: 0.3 }
+        });
+
+        resultStream = await chat.sendMessageStream({
+          message: contentParts
+        });
+
+        break; // success
+      } catch (err: any) {
+        attempt++;
+        console.error(`Attempt ${attempt} failed with model ${currentModel}:`, err);
+        if (attempt < maxAttempts) {
+          currentModel = 'gemini-2.5-flash';
+          console.log(`Retrying with fallback model: ${currentModel}`);
+        } else {
+          throw err;
+        }
+      }
+    }
 
     // Stream ke Res
     for await (const chunk of resultStream) {
@@ -66,6 +94,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     console.error('Error:', error);
     if (!res.headersSent) {
       res.status(500).json({ error: error.message || 'Internal Server Error' });
+    } else {
+      res.end();
     }
   }
 }

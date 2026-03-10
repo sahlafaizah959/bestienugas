@@ -36,6 +36,16 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message, onCitationCli
               <ReactMarkdown
                 urlTransform={(url) => url}
                 components={{
+                  // ✅ FIX: Explicit blockquote renderer — blue card always shows
+                  // regardless of CSS loading order or streaming state
+                  blockquote: ({ node, children, ...props }) => (
+                    <blockquote
+                      className="border-l-4 border-sky-500 pl-4 italic text-slate-600 bg-slate-50 py-2 pr-2 rounded my-3"
+                      {...props}
+                    >
+                      {children}
+                    </blockquote>
+                  ),
                   a: ({ node, href, children, ...props }) => {
                     const cleanHref = href?.trim() || '';
                     // Looser check for citation: protocol (case insensitive)

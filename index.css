@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom scrollbar for webkit */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+.markdown-body p {
+  margin-bottom: 0.75rem;
+  line-height: 1.6;
+}
+.markdown-body ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+.markdown-body blockquote {
+  border-left: 4px solid #0ea5e9;
+  padding-left: 1rem;
+  font-style: italic;
+  color: #475569;
+  background-color: #f8fafc;
+  padding: 0.5rem 0.5rem 0.5rem 1rem;
+  border-radius: 0.25rem;
+  margin-bottom: 0.75rem;
+}
