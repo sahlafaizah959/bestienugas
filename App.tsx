@@ -123,36 +123,70 @@ const PdfViewer: React.FC<PdfViewerProps> = ({ file, pageNumber, highlightText }
           if (!isPageActive) return;
 
           const normalizeText = (text: string) => {
+            // Support Indonesian and other Unicode characters
             return text
-              .replace(/[^\w\s]/gi, '')
+              .replace(/[.,;:!?"'()\[\]{}—–‐‑‒–————]/g, ' ')
               .toLowerCase()
               .replace(/\s+/g, ' ')
               .trim();
           };
 
           const cleanHighlight = normalizeText(highlightText);
-          
+          const highlightWords = cleanHighlight.split(' ').filter(w => w.length > 2);
+
+          // Build a concatenated string of all PDF text items for phrase-level search
+          // We need to find which items overlap with the highlight phrase
+          const allItems: { str: string; norm: string; item: any }[] = textContent.items
+            .filter((item: any) => item.str && item.str.trim().length > 0)
+            .map((item: any) => ({ str: item.str, norm: normalizeText(item.str), item }));
+
+          // Concatenate all normalized text to find phrase position
+          const fullText = allItems.map(i => i.norm).join(' ');
+          const phraseIndex = fullText.indexOf(cleanHighlight);
+
+          let matchedItems: Set<any> = new Set();
+
+          if (phraseIndex !== -1) {
+            // Phrase found: find which items overlap with the phrase range
+            let pos = 0;
+            for (const entry of allItems) {
+              const start = pos;
+              const end = pos + entry.norm.length;
+              // Check if this item overlaps with the found phrase
+              if (end > phraseIndex && start < phraseIndex + cleanHighlight.length) {
+                matchedItems.add(entry.item);
+              }
+              pos = end + 1; // +1 for the space separator
+            }
+          } else if (highlightWords.length >= 2) {
+            // Fallback: try to find items that contain ALL highlight words as a sequence
+            // Only match items where the item text contains at least 2 consecutive highlight words
+            for (const entry of allItems) {
+              const consecutiveMatch = highlightWords.some((word, i) => {
+                if (i === 0) return false;
+                return entry.norm.includes(highlightWords[i - 1]) && entry.norm.includes(word);
+              });
+              if (consecutiveMatch) {
+                matchedItems.add(entry.item);
+              }
+            }
+          }
+
           context.fillStyle = 'rgba(255, 255, 0, 0.4)'; // Transparent Yellow
           context.strokeStyle = 'rgba(255, 200, 0, 0.8)';
           context.lineWidth = 2;
 
-          textContent.items.forEach((item: any) => {
-            const itemStr = normalizeText(item.str);
-            if (itemStr && cleanHighlight && (itemStr.includes(cleanHighlight) || cleanHighlight.includes(itemStr))) {
-              const tx = window.pdfjsLib.Util.transform(
-                viewport.transform,
-                item.transform
-              );
-              
-              const itemWidth = item.width * scale;
-              
-              const x = tx[4];
-              const y = tx[5] - (item.height * scale); // Adjust for baseline
-              
-              context.fillRect(x, y, itemWidth, item.height * scale * 1.2);
-              context.strokeRect(x, y, itemWidth, item.height * scale * 1.2);
-            }
-          });
+          for (const item of matchedItems) {
+            const tx = window.pdfjsLib.Util.transform(
+              viewport.transform,
+              item.transform
+            );
+            const itemWidth = item.width * scale;
+            const x = tx[4];
+            const y = tx[5] - (item.height * scale);
+            context.fillRect(x, y, itemWidth, item.height * scale * 1.2);
+            context.strokeRect(x, y, itemWidth, item.height * scale * 1.2);
+          }
         }
 
         setLoading(false);

@@ -43,8 +43,9 @@ CORE RULES (STRICT):
        Example: (citation:Modul%20PJOK%208%20Unit%202%20asep%20sudrajat.pdf?page=2&text=...)
 
    - page: The page number (integer).
-   - text: Take ONLY max 4 unique significant words. Clean from symbols. URL Encode it.
-   - Example: [📄 Write%20Up%20The%202048%20Killer.pdf, Hal. 1](citation:Write%20Up%20The%202048%20Killer.pdf?page=1&text=gambar%20dizoom%20flashdisk)
+   - text: Take a VERBATIM PHRASE of 4-7 consecutive words directly from the quote. This phrase will be used to locate and highlight the exact text in the PDF. Choose a unique, distinctive phrase. URL Encode it (spaces → %20). Do NOT use special characters, numbers, or punctuation in the text parameter.
+   - Example: [📄 Modul.pdf, Hal. 3](citation:Modul.pdf?page=3&text=blended%20learning%20melalui%20model%20pembelajaran)
+   - Example: [📄 ERJ.pdf, Hal. 2](citation:ERJ.pdf?page=2&text=tingkat%20literasi%20keuangan%20syariah%20baru%20mencapai)
 
 4. **Multi-Document Synthesis:** Compare findings across files if needed, but maintain strict clickable citations.
 
