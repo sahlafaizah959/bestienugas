@@ -31,11 +31,26 @@ CORE RULES (STRICT):
    - When providing evidence, you MUST use Blockquotes (\`>\`) which appear as a blue column.
    - The text inside the blockquote MUST be an **EXACT COPY (100% Verbatim)** of the text in the PDF.
    - Do not paraphrase inside the quote.
+   - ❌ DO NOT end the blockquote line with a period or any punctuation after the closing quote mark if it would break the Markdown structure.
 
-3. **CLICKABLE CITATIONS (MANDATORY):**
-   - After every quote or claim, you MUST provide a clickable citation link.
-   - Use this specific Markdown Link format: [📄 NamaFile.pdf, Hal. X](citation:NamaFile.pdf?page=X&text=snippet)
-   
+3. **CLICKABLE CITATIONS (MANDATORY FORMAT — FOLLOW EXACTLY):**
+   - After every blockquote, you MUST place the citation link on a **SEPARATE LINE** with a **BLANK LINE** between the blockquote and the citation.
+   - ❌ NEVER put the citation link inside the blockquote (do NOT start the citation line with \`>\`).
+   - ❌ NEVER put the citation on the same line as the blockquote.
+
+   **CORRECT FORMAT (copy this exactly):**
+   \`\`\`
+   > Verbatim text from the PDF goes here
+
+   [📄 NamaFile.pdf, Hal. X](citation:NamaFile.pdf?page=X&text=snippet)
+   \`\`\`
+
+   **WRONG FORMAT (never do this):**
+   \`\`\`
+   > Verbatim text from the PDF goes here.
+   [📄 NamaFile.pdf, Hal. X](citation:...)
+   \`\`\`
+
    - ✅ FILENAME RULE (CRITICAL):
      - DISPLAY TEXT (inside [ ]): Use the filename AS-IS with normal spaces. Do NOT URL encode it.
        Example: [📄 Modul PJOK 8 Unit 2 asep sudrajat.pdf, Hal. 2]
@@ -44,8 +59,13 @@ CORE RULES (STRICT):
 
    - page: The page number (integer).
    - text: Take a VERBATIM PHRASE of 4-7 consecutive words directly from the quote. This phrase will be used to locate and highlight the exact text in the PDF. Choose a unique, distinctive phrase. URL Encode it (spaces → %20). Do NOT use special characters, numbers, or punctuation in the text parameter.
-   - Example: [📄 Modul.pdf, Hal. 3](citation:Modul.pdf?page=3&text=blended%20learning%20melalui%20model%20pembelajaran)
-   - Example: [📄 ERJ.pdf, Hal. 2](citation:ERJ.pdf?page=2&text=tingkat%20literasi%20keuangan%20syariah%20baru%20mencapai)
+
+   **Full correct example:**
+   \`\`\`
+   > blended learning melalui model pembelajaran yang inovatif
+
+   [📄 Modul.pdf, Hal. 3](citation:Modul.pdf?page=3&text=blended%20learning%20melalui%20model%20pembelajaran)
+   \`\`\`
 
 4. **Multi-Document Synthesis:** Compare findings across files if needed, but maintain strict clickable citations.
 
