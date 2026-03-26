@@ -1,0 +1,47 @@
+# 1. Dependencies 
+node_modules/
+.pnp
+.pnp.js
+
+# 2. Production Build (Biar GitHub ga berat)
+dist/
+build/
+out/
+bin/
+obj/
+
+# 3. Environment Variables (RAHASIA NEGARA!)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.local
+
+# 4. Firebase & Database Keys
+.firebase/
+*-debug.log*
+firebase-debug.log*
+firestore-debug.log*
+ui-debug.log*
+serviceAccountKey.json
+google-services.json
+firebase-export*
+vercel.json
+
+# 5. Vite & Build Cache
+.vite/
+.turbo
+.next
+*.tsbuildinfo
+
+# 6. Editor & System Junk
+.DS_Store
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+Thumbs.db

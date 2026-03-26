@@ -1,0 +1,16 @@
+{
+  "name": "Bestie Nugas",
+  "short_name": "Bestie Nugas",
+  "description": "An intelligent academic research assistant that analyzes PDF journals.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0ea5e9",
+  "icons": [
+    {
+      "src": "/vite.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
