@@ -177,22 +177,22 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # --- BAGIAN HEADER (GANTI DARI SINI) ---
+# --- BAGIAN HEADER (VERSI BERSIH TANPA TOMBOL) ---
 col_left, col_center, col_right = st.columns([1, 2, 1])
 
 with col_left:
-    # Padding sedikit biar sejajar sama logo di tengah
-    st.markdown('<div style="padding-top: 25px;">', unsafe_allow_html=True)
-    st.link_button("← Balik ke Chat", "https://bestienugas.vercel.app")
-    st.markdown('</div>', unsafe_allow_html=True)
+    # Kita kosongkan kolom kiri
+    st.write("") 
 
 with col_center:
+    # Logo tetap gagah di tengah
     st.markdown('<div style="display: flex; justify-content: center; align-items: center; gap: 12px; padding: 20px 0;"><span style="font-size: 42px;">💛</span><span style="font-size: 42px; font-weight: 800; color: #333;">KUY JURNAL</span></div>', unsafe_allow_html=True)
 
 with col_right:
-    # Ini buat balikin badge trial kamu di pojok kanan agar simetris
+    # Badge trial di kanan agar tetap informatif
     st.markdown('<div style="display: flex; justify-content: flex-end; padding-top: 25px;"><div class="chat-badge">Ini Versi Trial</div></div>', unsafe_allow_html=True)
 
-st.divider() 
+st.divider()
 # --- SAMPAI SINI ---
 
 st.markdown('<div class="search-bar-wrapper">', unsafe_allow_html=True)
