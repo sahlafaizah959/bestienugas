@@ -3,20 +3,15 @@ import requests
 
 st.set_page_config(page_title="KUY JURNAL", page_icon="💛", layout="wide")
 
-# --- LOGIKA CEK LOGIN ---
-# Kita cek apakah ada parameter 'auth' di URL
-query_params = st.query_params
+# --- LOGIKA CEK LOGIN (VERSI TERBARU & FIX) ---
 
-if "auth" not in query_params or query_params["auth"] != "bestie_nugas_oke":
-    # Kalau nggak ada kunci, kasih tampilan "Dilarang Masuk"
+auth_key = st.query_params.get("auth")
+
+if auth_key != "bestie_nugas_oke":
     st.warning("⚠️ Eits! Kamu harus login dulu di Bestie Nugas buat akses fitur ini.")
     st.info("Silakan balik ke: https://bestienugas.vercel.app")
-    
-    # Tombol buat balik ke jalan yang benar
     st.link_button("Ke Halaman Login", "https://bestienugas.vercel.app")
-    
-    # Stop kodingan di bawah agar tidak jalan
-    st.stop() 
+    st.stop() # Matiin semua kode di bawah kalau kunci salah
 
 # --- KODE SISANYA (CSS, HEADER, DLL) LANJUT DI SINI ---
 
