@@ -12,62 +12,6 @@ st.markdown("""
         background-color: #FFFDE7;
     }
 
-    .header-container {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 40px 20px;
-        background-color: #FFFDE7;
-        margin-bottom: 0;
-    }
-
-    .header-left, .header-right {
-        flex: 1;
-        display: flex;
-    }
-
-    .header-right {
-        justify-content: flex-end;
-    }
-
-    .header-center {
-        flex: 2;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 12px;
-    }
-
-    .header-logo {
-        font-size: 42px;
-    }
-
-    .header-title {
-        font-size: 42px;
-        font-weight: 800;
-        color: #333;
-        margin: 0;
-    }
-
-    .back-btn {
-        background-color: #FDD835;
-        color: #333;
-        padding: 12px 24px;
-        border-radius: 30px;
-        text-decoration: none;
-        font-weight: 600;
-        font-size: 16px;
-        border: 2px solid #FBC02D;
-        cursor: pointer;
-        box-shadow: 0 2px 8px rgba(253, 216, 53, 0.3);
-        display: inline-block;
-    }
-
-    .back-btn:hover {
-        background-color: #FBC02D;
-        box-shadow: 0 4px 12px rgba(253, 216, 53, 0.5);
-    }
-
     .chat-badge {
         background-color: #FDD835;
         color: #333;
@@ -232,30 +176,24 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
+# --- BAGIAN HEADER (GANTI DARI SINI) ---
 col_left, col_center, col_right = st.columns([1, 2, 1])
 
 with col_left:
-    # Pakai link_button asli Streamlit biar pasti bisa diklik
-    st.markdown('<div style="padding: 35px 0 0 20px;">', unsafe_allow_html=True)
+    # Padding sedikit biar sejajar sama logo di tengah
+    st.markdown('<div style="padding-top: 25px;">', unsafe_allow_html=True)
     st.link_button("← Balik ke Chat", "https://bestienugas.vercel.app")
     st.markdown('</div>', unsafe_allow_html=True)
 
 with col_center:
-    st.markdown("""
-    <div style="display: flex; justify-content: center; align-items: center; gap: 12px; padding: 40px 0;">
-        <span style="font-size: 42px;">💛</span>
-        <span style="font-size: 42px; font-weight: 800; color: #333;">KUY JURNAL</span>
-    </div>
-    """, unsafe_allow_html=True)
+    st.markdown('<div style="display: flex; justify-content: center; align-items: center; gap: 12px; padding: 20px 0;"><span style="font-size: 42px;">💛</span><span style="font-size: 42px; font-weight: 800; color: #333;">KUY JURNAL</span></div>', unsafe_allow_html=True)
 
 with col_right:
-    st.markdown("""
-    <div style="display: flex; justify-content: flex-end; padding: 45px 20px 0 0;">
-        <div class="chat-badge">Ini Versi Trial</div>
-    </div>
-    """, unsafe_allow_html=True)
+    # Ini buat balikin badge trial kamu di pojok kanan agar simetris
+    st.markdown('<div style="display: flex; justify-content: flex-end; padding-top: 25px;"><div class="chat-badge">Ini Versi Trial</div></div>', unsafe_allow_html=True)
 
-st.markdown('<div class="center-all">', unsafe_allow_html=True)
+st.divider() 
+# --- SAMPAI SINI ---
 
 st.markdown('<div class="search-bar-wrapper">', unsafe_allow_html=True)
 query = st.text_input("", placeholder="Cari jurnal apa Bestie?", key="search_input", label_visibility="collapsed")
@@ -285,8 +223,6 @@ with col_toggle:
     st.markdown('<div style="padding-top: 28px;">', unsafe_allow_html=True)
     open_access_only = st.toggle("Hanya PDF Gratis", key="open_access")
     st.markdown('</div>', unsafe_allow_html=True)
-
-st.markdown('</div>', unsafe_allow_html=True) # Tutup center-all
 
 
 if search_clicked:
