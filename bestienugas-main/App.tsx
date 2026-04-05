@@ -728,7 +728,6 @@ const App: React.FC = () => {
             Reset
           </Button>
 
-            // KODE BARU (Copy & Paste bagian ini)
 <button
   onClick={() => {
     if (!currentUser) {
