@@ -729,12 +729,20 @@ const App: React.FC = () => {
           </Button>
 
             <button
-            onClick={() => window.open('https://kuy-jurnal-bestie-nugas.streamlit.app', '_blank')}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-700 text-xs font-bold border border-amber-200 shadow-sm transition-all duration-200 hover:-translate-y-0.5"
-          >
-            {/* Ganti ikon Search jadi emoji atau biarkan keduanya juga boleh */}
-            <span>💛 Kuy Jurnal</span>
-          </button>
+  onClick={() => {
+    // 1. Cek dulu, udah login apa belum?
+    if (!currentUser) {
+      alert("Login dulu di Bestie Nugas ya, biar bisa akses Kuy Jurnal! 💛");
+      return;
+    }
+    // 2. Kalau sudah login, buka link sambil bawa "Kunci" (auth) dan "Identitas" (email)
+    const streamlitUrl = `https://kuy-jurnal-bestie-nugas.streamlit.app?auth=bestie_nugas_oke&user=${encodeURIComponent(currentUser.email || '')}`;
+    window.open(streamlitUrl, '_blank');
+  }}
+  className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-700 text-xs font-bold border border-amber-200 shadow-sm transition-all duration-200 hover:-translate-y-0.5"
+>
+  <span>💛 Kuy Jurnal</span>
+</button>
 
         </div>
       </header>
