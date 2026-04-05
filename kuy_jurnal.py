@@ -3,6 +3,23 @@ import requests
 
 st.set_page_config(page_title="KUY JURNAL", page_icon="💛", layout="wide")
 
+# --- LOGIKA CEK LOGIN ---
+# Kita cek apakah ada parameter 'auth' di URL
+query_params = st.query_params
+
+if "auth" not in query_params or query_params["auth"] != "bestie_nugas_oke":
+    # Kalau nggak ada kunci, kasih tampilan "Dilarang Masuk"
+    st.warning("⚠️ Eits! Kamu harus login dulu di Bestie Nugas buat akses fitur ini.")
+    st.info("Silakan balik ke: https://bestienugas.vercel.app")
+    
+    # Tombol buat balik ke jalan yang benar
+    st.link_button("Ke Halaman Login", "https://bestienugas.vercel.app")
+    
+    # Stop kodingan di bawah agar tidak jalan
+    st.stop() 
+
+# --- KODE SISANYA (CSS, HEADER, DLL) LANJUT DI SINI ---
+
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
