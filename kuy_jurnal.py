@@ -232,20 +232,28 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-st.markdown("""
-<div class="header-container">
-    <div class="header-left">
-        <a href="https://bestienugas.vercel.app" class="back-btn">Balik ke Chat</a>
+col_left, col_center, col_right = st.columns([1, 2, 1])
+
+with col_left:
+    # Pakai link_button asli Streamlit biar pasti bisa diklik
+    st.markdown('<div style="padding: 35px 0 0 20px;">', unsafe_allow_html=True)
+    st.link_button("← Balik ke Chat", "https://bestienugas.vercel.app")
+    st.markdown('</div>', unsafe_allow_html=True)
+
+with col_center:
+    st.markdown("""
+    <div style="display: flex; justify-content: center; align-items: center; gap: 12px; padding: 40px 0;">
+        <span style="font-size: 42px;">💛</span>
+        <span style="font-size: 42px; font-weight: 800; color: #333;">KUY JURNAL</span>
     </div>
-    <div class="header-center">
-        <span class="header-logo">💛</span>
-        <span class="header-title">KUY JURNAL</span>
-    </div>
-    <div class="header-right">
+    """, unsafe_allow_html=True)
+
+with col_right:
+    st.markdown("""
+    <div style="display: flex; justify-content: flex-end; padding: 45px 20px 0 0;">
         <div class="chat-badge">Ini Versi Trial</div>
     </div>
-</div>
-""", unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
 
 st.markdown('<div class="center-all">', unsafe_allow_html=True)
 
